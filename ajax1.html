@@ -7,20 +7,44 @@
 </head>
 <body>
     <button id="button">Button</button>
+    <br>
+    <br>
+    <div id="text"></div>
 
     <script>
 
-        document.getElementById('button').addEventListener('click', loadText)
+        document.getElementById('button').addEventListener('click', loadText);
+
 
         function loadText(){
             var xhr = new XMLHttpRequest();
-            xhr.open('GET', 'sample.txt', true);
+            xhr.open('GET','sample.txt',true);
 
+            // Optional Loader for waiting for something
+            xhr.onprogres = function(){
+                console.log('READYSTATE:', xhr.readyState);
+            }
+
+            // Will chaeck for ready state and execute when ready state is 4
             xhr.onload = function(){
                 if(this.status == 200){
                     console.log(this.responseText);
+                    document.getElementById('text').innerHTML = this.responseText;
+                }else if(this.status == 404 ){
+                    document.getElementById('text').innerHTML = "Not Found";
                 }
             }
+
+            xhr.onerror = function(){
+                console.log("Request Error..")
+            }
+            
+            // Old way, have to check for ready state manually. wont execute unless ready state is == 4
+            // xhr.onreadystatechange = function(){
+            //     if(this.readyState == 4 && this.status == 200){
+            //         console.log(this.responseText);
+            //     }
+            // }
             xhr.send();
         }
     </script>
