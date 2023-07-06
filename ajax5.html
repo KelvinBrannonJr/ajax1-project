@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax 5 - Fetch from PHP MySQL</title>
+</head>
+<body>
+    <button id="button1">Get User</button>
+    <br><br>
+
+    <h1>User</h1>
+    <div id="users"></div>
+
+    <div id="errorText"></div>
+
+
+    <script>
+        document.getElementById('button1').addEventListener('click', loadUsers);
+    
+
+        function loadUsers(){
+            var xhr = new XMLHttpRequest();
+    
+            xhr.open('GET','users.php',true);
+    
+            xhr.onload = function(){
+                if(this.status == 200){
+                    var users = JSON.parse(this.responseText)
+                    var output = " ";
+
+                    for(var i in users){
+                        output += '<ul>' + 
+                            '<li>ID: '+users[i].id+'</li>'+
+                            '<li>NAME: '+users[i].name+'</li>'+
+                            '</ul>';
+                    }
+
+                    document.getElementById('users').innerHTML = output;
+
+                }else if(this.status == 404){
+                    document.getElementById('errorText').innerHTML = "Not Found";
+                }
+            }
+
+            xhr.send();
+        }
+    </script>
+</body>
+
+</html>
